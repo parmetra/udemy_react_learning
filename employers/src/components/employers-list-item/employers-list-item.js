@@ -1,10 +1,12 @@
+import className from "../../../node_modules/classnames/";
 import "./employers-list-item.css";
 
 const EmployersListItem = ({name, salary, increase}) => {
 
 	let nameOfClass = "list-group-item d-flex justify-content-between";
 	if (increase) {
-		nameOfClass += " increase";
+		// nameOfClass += " increase";
+		nameOfClass = className(nameOfClass, "increase");
 	}
 
 	return (
