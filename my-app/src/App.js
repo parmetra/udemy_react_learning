@@ -1,56 +1,27 @@
 import {Component} from 'react';
 import './App.css';
 
-const Header = () => {
-	return <h2>Hello!</h2>;
-};
-
-const FieldVar = () => {
-	const holder = "Enter here...";
-	const styleField = {
-		width: "300px",
-		height: "80px"
-	};
-	return <input 
-			placeholder={holder} 
-			type="text" 
-			style={styleField}/>
-}
-
-class Field extends Component {
-	render() {
-		const holder = "Enter here...";
-		const styleField = {
-			width: "300px",
-			height: "10px"
-		};
-
-		return <input 
-			placeholder={holder} 
-			type="text" 
-			style={styleField}/>
-	}
-}
-
-function Btn() {
-	const text = "Login";
-	const logged = false;
-	/* const res = () => {
-		return "LOGIN";
-	}
-	const p = <p>Log in</p> */
-	return <button>{logged ? 'Enter' : text}</button>; // тернарный оператор разрешён в фигурных скобках, а обычный if / else - не сработает
+function WhoAmI ({name, surname, link}) {
+	return (
+		<div>
+			{/* <h1>My name is {name}, surname - {surname}</h1> */}
+			{/* <h1>My name is {name.firstName}, surname - {surname}</h1> */}
+			<h1>My name is {name()}, surname - {surname}</h1>
+			<a href={link}>My site</a>
+		</div>
+	)
 }
 
 function App() {
   return (
     <div className="App">
-		<Header/>
-		<Field/>
-		<Btn/>
+		{/* <WhoAmI name="John" surname="Smith" link="ya.ru"/>
+		<WhoAmI name="Alex" surname="Johns" link="mail.ru"/> */}
+		{/* <WhoAmI name={{firstName: "Igor"}} surname="Rabbit" link="mail.ru"/> */}
+		<WhoAmI name={() => {return "Sam"}} surname="Samow" link="mail.ru"/>
     </div>
   );
 }
 
-export {Header};
+
 export default App;
