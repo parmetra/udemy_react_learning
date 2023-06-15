@@ -9,7 +9,7 @@ function App() {
 
 	const data = [
 		{name: "Иван К.", salary: 800, increase: false, id: 1},
-		{name: "Денис С.", salary: 950, increase: true, id: 2},
+		{name: "Денис С.", salary: 950, increase: false, id: 2},
 		{name: "Пётр Б.", salary: 1150, increase: false, id: 3}
 	];
 
