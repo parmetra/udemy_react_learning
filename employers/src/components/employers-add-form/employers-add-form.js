@@ -6,14 +6,27 @@ class EmployersFormAdd extends Component {
 		super(props);
 		this.state = {
 			name: "",
-			salary: ""
+			salary: "",
+			btnDisabled: true
 		}
 	}
 
 	onValueChange = (e) => {
 		this.setState({
 			[e.target.name]: e.target.value
-		})
+		});
+		
+		const regExp = /[а-яА-Я]+/g;
+		
+		if (regExp.test(this.state.name) && this.state.name.length > 1 && this.state.salary > 1) {
+			this.setState({
+				btnDisabled: false
+			})
+		} else {
+			this.setState({
+				btnDisabled: true
+			})
+		}
 	}
 
 	onAddNewPerson = (e) => {
@@ -21,12 +34,13 @@ class EmployersFormAdd extends Component {
 		this.props.onAddNewPerson(this.state.name, this.state.salary);
 		this.setState({
 			name: "",
-			salary: ""
+			salary: "",
+			btnDisabled: true
 		})
 	}
 
 	render() {
-		const {name, salary} = this.state;
+		const {name, salary, btnDisabled} = this.state;
 
 		return (
 			<div className="app-add-form">
@@ -47,7 +61,9 @@ class EmployersFormAdd extends Component {
 						onChange={this.onValueChange}/>
 	
 					<button type="submit"
-							className="btn btn-outline-light" onClick={this.onAddNewPerson}>Добавить</button>
+							className="btn btn-outline-light" 
+							onClick={this.onAddNewPerson}
+							disabled={btnDisabled}>Добавить</button>
 				</form>
 			</div>
 		)
