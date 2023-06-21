@@ -14,19 +14,19 @@ class EmployersFormAdd extends Component {
 	onValueChange = (e) => {
 		this.setState({
 			[e.target.name]: e.target.value
+		}, () => {
+			const regExp = /^[А-Я][а-я]+\s[А-Я]\.$/g;			
+		
+			if (regExp.test(this.state.name) && this.state.name.length > 1 && this.state.salary >= 1) {
+				this.setState({
+					btnDisabled: false
+				})
+			} else {
+				this.setState({
+					btnDisabled: true
+				})
+			}
 		});
-		
-		const regExp = /[а-яА-Я]+/g;
-		
-		if (regExp.test(this.state.name) && this.state.name.length > 1 && this.state.salary > 1) {
-			this.setState({
-				btnDisabled: false
-			})
-		} else {
-			this.setState({
-				btnDisabled: true
-			})
-		}
 	}
 
 	onAddNewPerson = (e) => {
