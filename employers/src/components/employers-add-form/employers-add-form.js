@@ -4,15 +4,13 @@ import {Component} from "react";
 import "./employers-add-form.scss";
 
 class EmployersFormAdd extends Component {
-	constructor(props) {
-		super(props);
-		this.state = {
-			name: "",
-			salary: "",
-			btnDisabled: true
-		}
+	// Не нужно использовать constructor и this перед state
+	state = {
+		name: "",
+		salary: "",
+		btnDisabled: true
 	}
-
+	
 	onValueChange = (e) => {
 		this.setState({
 			[e.target.name]: e.target.value
@@ -40,6 +38,12 @@ class EmployersFormAdd extends Component {
 			btnDisabled: true
 		})
 	}
+
+	static onLog = () => {
+		console.log('Hey');
+	}
+
+	static logged = 'on';
 
 	render() {
 		const {name, salary, btnDisabled} = this.state;
@@ -71,5 +75,9 @@ class EmployersFormAdd extends Component {
 		)
 	}
 }
+
+// EmployersFormAdd.onValueChange(); /* Будет ошибка */
+EmployersFormAdd.onLog();			 /* Отработает */
+console.log(EmployersFormAdd.logged);/* Отработает */
 
 export default EmployersFormAdd;
