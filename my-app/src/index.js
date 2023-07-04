@@ -5,6 +5,9 @@ import App from './App';
 import {Header} from './App';
 import { Button } from './App';
 import styled from 'styled-components';
+import BootstrapTest from './BootstrapTest';
+
+import 'bootstrap/dist/css/bootstrap.min.css';
 
 
 const BigButton = styled(Button)`
@@ -19,5 +22,6 @@ root.render(
 		<App />
 		<Button/>
 		<BigButton as="a">I am BIG link</BigButton>
+		<BootstrapTest/>
 	</>
 );
