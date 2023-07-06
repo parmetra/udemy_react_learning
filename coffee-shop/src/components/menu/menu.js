@@ -1,9 +1,13 @@
 import NavItem from "../nav-item/nav-item";
 
-import "./nav.sass";
-import logo from "../../icons/coffee-beans.png";
+import "./menu.sass";
 
-const Nav = ({menuItems}) => {
+const Nav = ({color}) => {
+	const menuItems = [
+		{id: 1, name: 'Coffee house'}, 
+		{id: 2, name: 'Our coffe'}, 
+		{id: 3, name: 'For your pleasure'}
+	];
 	const menuItem = menuItems.map(item => {
 		const {id, name} = item;
 		return (
@@ -16,8 +20,8 @@ const Nav = ({menuItems}) => {
 	})
 
 	return (
-		<div className="nav">
-			<img src={logo} alt="coffee-logo" />
+		<div className="menu">
+			<div style={{background: color}}></div>
 			<ul>
 				{menuItem}
 			</ul>

@@ -7,6 +7,7 @@ import imgCoffeeSecond from "../../images/coffee_2.png";
 import imgCoffeeThird from "../../images/coffee_3.png";
 
 import "./app.sass";
+import Footer from "../footer/footer";
 
 class App extends Component{
 	constructor(props) {
@@ -31,8 +32,9 @@ class App extends Component{
 	render() {
 		return (
 			<div className="app">
-				<Promo />
+				<Promo/>
 				<Content data={this.state.data}/>
+				<Footer/>
 			</div>
 		);
 	}

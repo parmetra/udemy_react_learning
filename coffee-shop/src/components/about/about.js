@@ -3,11 +3,6 @@ import Divider from "../divider/divider";
 import "./about.sass";
 
 const About = () => {
-	const menuItems = [
-		{id: 1, name: 'Coffee house'}, 
-		{id: 2, name: 'Our coffe'}, 
-		{id: 3, name: 'For your pleasure'}
-	];
 
 	return (
 		<div className="about">

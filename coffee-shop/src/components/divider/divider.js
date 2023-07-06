@@ -1,4 +1,3 @@
-import coffeeBeans from "../../icons/coffee-three.svg";
 import "./divider.sass";
 
 const Divider = ({color}) => {
