@@ -1,0 +1,20 @@
+.products
+	margin-top: 61px
+	display: grid
+	grid-template-columns: repeat(3, 1fr)
+	grid-auto-columns: repeat(3, 1fr)
+	grid-template-rows: 1fr
+	grid-auto-rows: 1fr
+	justify-items: center
+	gap: 60px 71px
+	&__wrapper
+		max-width: 840px
+		margin: 0 auto
+		padding: 0 20px
+
+@media (max-width: 767px)
+	.products
+		grid-template-columns: repeat(2, 1fr)
+		grid-auto-columns: repeat(2, 1fr)
+		&__wrapper
+			max-width: 600px

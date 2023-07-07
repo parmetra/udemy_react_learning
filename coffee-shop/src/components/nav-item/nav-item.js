@@ -1,9 +1,9 @@
 import "./nav-item.sass";
 
-const NavItem = ({value}) => {
+const NavItem = ({value, dataPage, onChangePage}) => {
 	return (
-		<li>
-			<span className="nav-item">{value}</span>
+		<li onClick={onChangePage}>
+			<span className="nav-item" data-page={dataPage}>{value}</span>
 		</li>
 	)
 }

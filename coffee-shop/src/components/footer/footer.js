@@ -3,11 +3,11 @@ import Divider from "../divider/divider";
 
 import "./footer.sass";
 
-const Footer = () => {
+const Footer = (props) => {
 	
 	return (
 		<div className="footer">
-			<Menu color={'black'}/>
+			<Menu color={'black'} onChangePage={props.onChangePage}/>
 			<Divider color={'black'}/>
 		</div>
 	)

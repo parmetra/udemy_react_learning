@@ -2,7 +2,7 @@ import NavItem from "../nav-item/nav-item";
 
 import "./menu.sass";
 
-const Nav = ({color}) => {
+const Nav = ({color, onChangePage}) => {
 	const menuItems = [
 		{id: 1, name: 'Coffee house'}, 
 		{id: 2, name: 'Our coffe'}, 
@@ -14,10 +14,14 @@ const Nav = ({color}) => {
 			<NavItem
 				key={id}
 				value={name}
+				dataPage={id}
+				onChangePage={(e) => onChangePage(e)}
 			/>
 		)
 
-	})
+	});
+
+	
 
 	return (
 		<div className="menu">

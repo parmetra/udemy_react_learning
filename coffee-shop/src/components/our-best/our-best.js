@@ -2,17 +2,19 @@ import Product from "../product/product";
 
 import "./our-best.sass";
 
-const OurBest = ({data}) => {
+const OurBest = (props) => {
 
 	// Фильтруем только isFavorite
-	const bestProducts = data.filter(item => item.isFavorite);
+	const bestProducts = props.data.data.filter(item => item.isFavorite);
 
 	const products = bestProducts.map(item => {
 		const {id, country, ...itemProps} = item;
 		return (
 			<Product
-				key={id} 
+				key={id}
+				dataId={id}
 				{...itemProps}
+				showThisCoffee={props.data.showThisCoffee}
 			/>
 		)
 	});
