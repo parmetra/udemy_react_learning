@@ -14,14 +14,25 @@ class MarverService {
 		return await res.json();
 	}
 
-	getAllCharachters = () => {
-		return this.getResource(`${this._apiBase}characters?limit=9&offset=450&${this._apiKey}`);
+	getAllCharachters = async () => {
+		const res = await this.getResource(`${this._apiBase}characters?limit=9&offset=450&${this._apiKey}`);
+		return res.data.results.map(this._transformCharacher);
 	}
 
-	getCharachter = (id) => {
-		return this.getResource(`${this._apiBase}characters/${id}?${this._apiKey}`);
+	getCharachter = async (id) => {
+		const res = await this.getResource(`${this._apiBase}characters/${id}?${this._apiKey}`);
+		return this._transformCharacher(res.data.results[0]);
 	}
 	
+	_transformCharacher = (charachter) => {
+		return {
+			name: charachter.name,
+			description: charachter.description ? `${charachter.description.slice(0, 220)}...` : `Описание отсутствует`,
+			thumbnail: `${charachter.thumbnail.path}.${charachter.thumbnail.extension}`,
+			homepage: charachter.urls[0].url,
+			wiki: charachter.urls[1].url
+		}
+	}
 }
 
 export default MarverService;
