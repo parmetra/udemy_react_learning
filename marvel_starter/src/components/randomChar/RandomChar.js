@@ -7,10 +7,7 @@ import './randomChar.scss';
 import mjolnir from '../../resources/img/mjolnir.png';
 
 class RandomChar extends Component {
-	constructor(props) {
-		super(props);
-		this.updateChar();
-	}
+
 	state = {
 		charachter: {},
 		loading: true,
@@ -19,6 +16,9 @@ class RandomChar extends Component {
 
 	marvelService = new MarverService();
 
+	componentDidMount() {
+		this.updateChar();
+	}
 
 	onCharLoaded = (charachter) => {
 		this.setState({
@@ -36,6 +36,10 @@ class RandomChar extends Component {
 	}
 
 	updateChar = () => {
+		this.setState({
+			loading: true,
+			error: false
+		});
 		const id = Math.floor(Math.random() * (1011050 - 1010900) + 1010900);
 		this.marvelService
 			.getCharachter(id)
@@ -75,10 +79,11 @@ class RandomChar extends Component {
 const View = ({charachter}) => {
 
 	const {name, description, thumbnail, homepage, wiki } = charachter;
+	const clazz = "randomchar__img" + (thumbnail.includes("image_not_available") ? " image_not_available" : "");
 
 	return (
 		<div className="randomchar__block">
-			<img src={thumbnail} alt="Random character" className="randomchar__img"/>
+			<img src={thumbnail} alt="Random character" className={clazz}/>
 			<div className="randomchar__info">
 				<p className="randomchar__name">{name}</p>
 				<p className="randomchar__descr">{description}</p>

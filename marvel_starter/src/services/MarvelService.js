@@ -15,7 +15,7 @@ class MarverService {
 	}
 
 	getAllCharachters = async () => {
-		const res = await this.getResource(`${this._apiBase}characters?limit=9&offset=450&${this._apiKey}`);
+		const res = await this.getResource(`${this._apiBase}characters?limit=${9}&offset=450&${this._apiKey}`);
 		return res.data.results.map(this._transformCharacher);
 	}
 
@@ -26,6 +26,7 @@ class MarverService {
 	
 	_transformCharacher = (charachter) => {
 		return {
+			id: charachter.id,
 			name: charachter.name,
 			description: charachter.description ? `${charachter.description.slice(0, 220)}...` : `Описание отсутствует`,
 			thumbnail: `${charachter.thumbnail.path}.${charachter.thumbnail.extension}`,
