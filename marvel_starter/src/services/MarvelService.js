@@ -31,7 +31,8 @@ class MarverService {
 			description: charachter.description ? `${charachter.description.slice(0, 220)}...` : `Описание отсутствует`,
 			thumbnail: `${charachter.thumbnail.path}.${charachter.thumbnail.extension}`,
 			homepage: charachter.urls[0].url,
-			wiki: charachter.urls[1].url
+			wiki: charachter.urls[1].url,
+			comics: charachter.comics.items
 		}
 	}
 }

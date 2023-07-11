@@ -52,7 +52,7 @@ class CharList extends Component {
             const {name, thumbnail, id} = item;
             const objectFitProperty = thumbnail.includes("image_not_available") ? "contain" : null;
             return (
-                <li className="char__item" key={id}>
+                <li className="char__item" key={id} onClick={() => {this.props.onCharSelected(item.id)}}>
                     <img src={thumbnail} alt={name} style={{objectFit: objectFitProperty}}/>
                     <div className="char__name">{name}</div>
                 </li>
