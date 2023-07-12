@@ -3,6 +3,7 @@
 class MarverService {
 	_apiBase = "https://gateway.marvel.com:443/v1/public/";
 	_apiKey = "apikey=f4bcc2ac3bb99f27cd2d3f164a8f91dd";
+	_baseOffset = 450;
 
 	getResource = async (url) => {
 		let res = await fetch(url);
@@ -14,8 +15,8 @@ class MarverService {
 		return await res.json();
 	}
 
-	getAllCharachters = async () => {
-		const res = await this.getResource(`${this._apiBase}characters?limit=${9}&offset=450&${this._apiKey}`);
+	getAllCharachters = async (offset = this._baseOffset) => {
+		const res = await this.getResource(`${this._apiBase}characters?limit=${9}&offset=${offset}&${this._apiKey}`);
 		return res.data.results.map(this._transformCharacher);
 	}
 

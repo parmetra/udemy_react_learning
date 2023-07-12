@@ -10,27 +10,68 @@ class CharList extends Component {
     state = {
         charachters: [],
         loading: true,
-        error: false
+        error: false,
+        newItemLoading: false,
+        countItems: 450,
+        charEnded: false
     }
 
     marvelService = new MarverService();
 
     componentDidMount() {
-		this.renderCharachters();
+		this.renderCharachters(); 
+
+        window.addEventListener("scroll", this.onScroll);
 	}
 
-    renderCharachters = () => {
+    componentWillUnmount() {
+        window.removeEventListener("scroll", this.onScroll);
+    }
+
+    onScroll = () => {
+        if (this.state.newItemLoading) return;
+        
+        if (this.state.charEnded) {
+            window.removeEventListener("scroll", this.onScroll);
+        }
+        
+        if (window.innerHeight + window.scrollY >= document.body.offsetHeight - 300) {
+            
+            this.onCharachtersLoading();
+            this.renderCharachters(this.state.countItems);
+        }
+        
+    }
+
+    renderCharachters = (offset) => {
+        this.onCharachtersLoading();
 		this.marvelService
-			.getAllCharachters()
+			.getAllCharachters(offset)
 			.then(this.onCharachtersLoaded)
             .catch(this.onError)
 	}
 
-    onCharachtersLoaded = (charachters) => {
-		this.setState({
-            charachters, 
-            loading: false
-        });
+    onCharachtersLoading = () => {
+        this.setState({
+            newItemLoading: true
+        })
+    }
+
+    onCharachtersLoaded = (newCharachters) => {
+        let ended = false;
+        if (newCharachters.length < 9) {
+            ended = true;
+        }
+
+		this.setState(({countItems, charachters}) => (
+            {
+                charachters: [...charachters, ...newCharachters], 
+                loading: false,
+                newItemLoading: false,
+                countItems: countItems + 9,
+                charEnded: ended
+            }
+        ));
 	}
 
     addMoreCharachters = () => {
@@ -67,7 +108,7 @@ class CharList extends Component {
     
 
     render() {
-        const {error, loading, charachters} = this.state;
+        const {error, loading, charachters, newItemLoading, countItems, charEnded} = this.state;
         const errorMessage = error ? <ErrorMessage/> : null;
         const spinner = loading ? <Spinner/> : null;
         const content = !(loading || error) ? this.renderItems(charachters) : null;
@@ -76,7 +117,11 @@ class CharList extends Component {
                 {errorMessage}
                 {spinner}
                 {content}
-                <button className="button button__main button__long" onClick={this.addMoreCharachters}>
+                <button className="button button__main button__long" 
+                    id='loadMoreBtn'
+                    disabled={newItemLoading}
+                    style={{"display": charEnded ? "none" : "block"}}
+                    onClick={() => this.renderCharachters(countItems)}>
                     <div className="inner">load more</div>
                 </button>
             </div>
