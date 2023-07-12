@@ -18,7 +18,7 @@ class CharInfo extends Component {
 		this.updateChar();
 	}
 
-	componentDidUpdate(prevProps, prevState) {
+	componentDidUpdate(prevProps) {
 		if (this.props.charID !== prevProps.charID) {
 			this.updateChar();
 		}
@@ -77,7 +77,6 @@ class CharInfo extends Component {
 const View = ({charachter}) => {
 	const {thumbnail, name, homepage, wiki, description, comics} = charachter;
 	const objectFitProperty = thumbnail.includes("image_not_available") ? "contain" : null;
-	console.log(comics.length);
 	return (
 		<>
 			<div className="char__basics">
