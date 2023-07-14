@@ -96,6 +96,16 @@ const DynamicGreating =(props) => {
 	)
 }
 
+const HelloGreating = () => {
+	return (
+		<div style={{"width": "500px", "margin": "0 auto"}}>
+			<DynamicGreating color={"primary"}>
+				<h2>Hello!</h2>
+			</DynamicGreating>
+		</div>
+	)
+}
+
 function App() {
   return (
     <Wrapper>
@@ -103,6 +113,8 @@ function App() {
 			<h2>This is good!</h2>
 			<h2>This is not good...</h2>
 		</DynamicGreating>
+
+		<HelloGreating/>
 
 		<BootstrapTest
 			left = {
