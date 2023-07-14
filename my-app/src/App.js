@@ -1,4 +1,5 @@
 import React, {Component} from 'react';
+import ReactDOM from 'react-dom/client';
 import styled from 'styled-components';
 import {Container} from 'react-bootstrap';
 
@@ -140,6 +141,10 @@ class Counter extends Component {
 }
 
 class Form extends Component {
+	state = {
+		isHidden: true
+	}
+
 	/* Стандартный способ создания */
 	// myRef = React.createRef(); 
 
@@ -152,6 +157,8 @@ class Form extends Component {
 		if(this.myRef) {
 			this.myRef.focus();
 		}
+
+		setTimeout(this.handleClick, 3000)
 	}
 
 	focusInput = () => {
@@ -160,10 +167,16 @@ class Form extends Component {
 		}
 	}
 
+	handleClick = () => {
+		this.setState(({isHidden}) => {
+			return {isHidden: !isHidden}
+		})
+	}
+
     render() {
         return (
             <Container>
-                <form className="w-50 border mt-5 p-3 m-auto">
+                <form onClick={this.handleClick} className="w-50 border mt-5 p-3 m-auto" style={{position: "relative", overflow: "hidden"}}>
                     <div className="mb-3">
                         <label htmlFor="exampleFormControlInput1" className="form-label">Email address</label>
                         <input 
@@ -175,12 +188,28 @@ class Form extends Component {
                     </div>
                     <div className="mb-3">
                         <label htmlFor="exampleFormControlTextarea1" className="form-label">Example textarea</label>
-                        <textarea className="form-control" id="exampleFormControlTextarea1" rows="3" onClick={this.focusInput}></textarea>
+                        <textarea className="form-control" id="exampleFormControlTextarea1" rows="3"></textarea>
                     </div>
+					{this.state.isHidden ? null: <Portal><Msg/></Portal>}
                 </form>
             </Container>
         )
     }
+}
+
+const Portal = (props) => {
+	const node = document.createElement("div");
+	document.body.append(node);
+	return ReactDOM.createPortal(props.children, node);
+}
+
+const Msg = () => {
+	return (
+		<div
+			style={{width: 500, height: 150, backgroundColor: "red", position: "absolute", right: 0, bottom: "10%"}}>
+			Some Text
+		</div>
+	)
 }
 
 function App() {
