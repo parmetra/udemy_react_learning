@@ -106,9 +106,46 @@ const HelloGreating = () => {
 	)
 }
 
+const Message = (props) => {
+	return (
+		<h2>The counter is {props.counter}</h2>
+	)
+}
+
+class Counter extends Component {
+	state = {
+		counter: 0
+	}
+
+	changeCounter = () => {
+		this.setState(({counter}) => {
+			return {counter: counter + 1}
+		})
+	}
+
+	render() {
+		return (
+			<>
+				<button 
+					className={"btn btn-primary"}
+					onClick={this.changeCounter}>
+					Click
+				</button>
+				{this.props.render(this.state.counter)}
+			</>
+		)
+	}
+
+}
+
 function App() {
   return (
     <Wrapper>
+
+		<Counter render={counter => (
+			<Message counter={counter}/>
+		)}/>
+
 		<DynamicGreating color={"primary"}>
 			<h2>This is good!</h2>
 			<h2>This is not good...</h2>
