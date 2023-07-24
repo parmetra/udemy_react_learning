@@ -1,4 +1,4 @@
-import {Component, useState} from 'react';
+import {Component, useState, useEffect} from 'react';
 import {Container} from 'react-bootstrap';
 import './App.css';
 /* class Slider extends Component {
@@ -77,6 +77,30 @@ const Slider = (props) => {
 	// 	seState(state => ({...state, autoplay: !state.autoplay}))
 	// }
 
+
+	function logging() {
+		console.log('log');
+	}
+
+	// Эффекты
+	useEffect(() => {
+		document.title = `Slide: ${slide}`;
+
+		// Подписка на обработчик событий
+		window.addEventListener("click", logging);
+
+		// Отписка от обработчика событий
+		return () => {
+		window.removeEventListener("click", logging);
+		}
+
+	}, [slide]);
+	// Второй аргумент - массив зависимостей. То есть когда значения в массиве изменяются, useEffect срабатывает. Если массив будет пустым, это аналог componentDidUpdate, который срабатывает в первый раз при загрузке страниц. Можно использовать много useEffect для каждого действия
+
+	useEffect(() => {
+		console.log('auotplay changed');
+	}, [autoplay]);
+
 	return (
 		<Container>
 			<div className="slider w-50 m-auto">
@@ -100,9 +124,13 @@ const Slider = (props) => {
 
 
 function App() {
-  return (
-		<Slider/>
-  );
+	const [slider, setSlider] = useState(true);
+	return (
+		<>
+			<button onClick={() => setSlider(!slider)}>Click!</button>
+			{slider ? <Slider/> : null}
+		</>
+	);
 }
 
 export default App;
