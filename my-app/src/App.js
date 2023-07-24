@@ -1,4 +1,4 @@
-import React, {Component} from 'react';
+import React, {Component, useRef, useState, useEffect} from 'react';
 import ReactDOM from 'react-dom';
 import styled from 'styled-components';
 import {Container} from 'react-bootstrap';
@@ -140,47 +140,31 @@ class Counter extends Component {
 
 }
 
-class Form extends Component {
-	state = {
-		isHidden: true
-	}
+const Form = () => {
+	const [text, setText] = useState("");
 
-	/* Стандартный способ создания */
-	// myRef = React.createRef(); 
+	const myRef = useRef(1);
 
-	/* Если используется callback, то current не нужен */
-	setInputRef = (element) => {
-		this.myRef = element;
-	}
+	// const focusInput = () => {
+	// 	myRef.current.focus();
+	// }
 
-	componentDidMount() {
-		if(this.myRef) {
-			this.myRef.focus();
-		}
+	useEffect(() => {
+		myRef.current = text;
+	})
 
-		setTimeout(this.handleClick, 3000)
-	}
-
-	focusInput = () => {
-		if(this.myRef) {
-			this.myRef.focus();
-		}
-	}
-
-	handleClick = () => {
-		this.setState(({isHidden}) => {
-			return {isHidden: !isHidden}
-		})
-	}
-
-    render() {
         return (
             <Container>
-                <form onClick={this.handleClick} className="w-50 border mt-5 p-3 m-auto" style={{position: "relative", overflow: "hidden"}}>
+                <form 
+					// onClick={focusInput} 
+					className="w-50 border mt-5 p-3 m-auto" 
+					style={{position: "relative", overflow: "hidden"}}
+				>
                     <div className="mb-3">
                         <label htmlFor="exampleFormControlInput1" className="form-label">Email address</label>
                         <input 
-							ref={this.setInputRef} 
+							// ref={myRef} 
+							onChange={(e) => setText(e.target.value)}
 							type="email" 
 							className="form-control" 
 							id="exampleFormControlInput1" 
@@ -188,13 +172,17 @@ class Form extends Component {
                     </div>
                     <div className="mb-3">
                         <label htmlFor="exampleFormControlTextarea1" className="form-label">Example textarea</label>
-                        <textarea className="form-control" id="exampleFormControlTextarea1" rows="3"></textarea>
+                        <textarea 
+							// onClick={() => myRef.current++} 
+							className="form-control" 
+							id="exampleFormControlTextarea1" 
+							rows="3"
+							value={myRef.current}
+						></textarea>
                     </div>
-					{this.state.isHidden ? null: <Portal><Msg/></Portal>}
                 </form>
             </Container>
         )
-    }
 }
 
 const Portal = (props) => {
