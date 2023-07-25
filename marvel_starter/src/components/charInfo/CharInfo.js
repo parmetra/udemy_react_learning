@@ -1,4 +1,4 @@
-import { Component } from 'react';
+import { Component, useState, useEffect, useCallback } from 'react';
 import PropTypes from 'prop-types';
 import Spinner from '../spinner/Spinner';
 import ErrorMessage from '../errorMessage/ErrorMessage';
@@ -6,59 +6,47 @@ import Skeleton from '../skeleton/Skeleton';
 import MarverService from '../../services/MarvelService';
 import './charInfo.scss';
 
-class CharInfo extends Component {
-	state = {
-		char: null,
-		loading: false,
-		error: false
-	}
+const CharInfo = (props) => {
+	const [char, setChar] = useState(null);
+	const [loading, setLoading] = useState(false);
+	const [error, setError] = useState(false);
 
-	marvelService = new MarverService();
+	const marvelService = new MarverService();
 
-	componentDidMount() {
-		this.updateChar();
-	}
+	// Вызов useEffect при первоначальном рендеринге не нужен, т.к. useEffect ниже выполняет ту же работу при рендере в первый раз, а затем каждый раз, когда props.charID изменяется
+	/* useEffect(() => {
+		updateChar();
+	}, []); */
 
-	componentDidUpdate(prevProps) {
-		if (this.props.charID !== prevProps.charID) {
-			this.updateChar();
-		}
-	}
+	useEffect(() => {
+		updateChar();
+	}, [props.charID]);
 
-	updateChar = () => {
-		const {charID} = this.props;
+	const updateChar = () => {
+		const {charID} = props;
 
 		if (!charID) {
 			return;
 		}
 
-		this.setState({
-			loading: true
-		});
+		setLoading(true);
 
-		this.marvelService
+		marvelService
 			.getCharachter(charID)
-			.then(this.onCharLoaded)
-			.catch(this.onError);
+			.then(onCharLoaded)
+			.catch(onError);
 	}
 
-	onCharLoaded = (char) => {
-		this.setState({
-			char: char, 
-			loading: false,
-			error: false
-		});
+	const onCharLoaded = (char) => {
+		setChar(char);
+		setLoading(false);
+		setError(false);
 	}
 
-	onError = () => {
-		this.setState({
-			loading: false,
-			error: true
-		});
+	const onError = () => {
+		setLoading(false);
+		setError(true);
 	}
-
-	render() {
-		const {char, loading, error} = this.state;
 
 		const skeleton = char || loading || error ? null: <Skeleton/>
 		const errorMessage = error ? <ErrorMessage/> : null;
@@ -72,7 +60,7 @@ class CharInfo extends Component {
 				{content}
 			</div>
 		)
-	}
+	
 }
 
 const View = ({charachter}) => {
