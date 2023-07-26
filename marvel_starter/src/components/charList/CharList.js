@@ -1,7 +1,7 @@
 import { Component, useState, useEffect, useRef } from 'react';
 import PropTypes from 'prop-types';
 
-import MarverService from '../../services/MarvelService';
+import useMarverService from '../../services/MarvelService';
 import Spinner from '../spinner/Spinner';
 import ErrorMessage from '../errorMessage/ErrorMessage';
 
@@ -10,48 +10,26 @@ import './charList.scss';
 
 const CharList = (props) => {
 	const [charachters, setCharachters] = useState([]);
-	const [loading, setLoading] = useState(true);
-	const [error, setError] = useState(false);
+
+	// Отвечает за подгрузку новых персонажей
 	const [newItemLoading, setNewItemLoading] = useState(false);
+
 	const [countItems, setCountItems] = useState(450);
 	const [charEnded, setCharEnded] = useState(false);
 
-	const marvelService = new MarverService();
+	const {loading, error, getAllCharachters} = useMarverService();
 
 	useEffect(() => {
-		renderCharachters();
+		renderCharachters(countItems, true);
 	}, []);
 
 
-	// componentWillUnmount() {
-		// window.removeEventListener("scroll", this.onScroll);
-	// }
-
-/*     onScroll = () => {
-		if (this.state.newItemLoading) return;
-		
-		if (this.state.charEnded) {
-			window.removeEventListener("scroll", this.onScroll);
-		}
-		
-		if (window.innerHeight + window.scrollY >= document.body.offsetHeight - 300) {
-			
-			this.onCharachtersLoading();
-			this.renderCharachters(this.state.countItems);
-		}
-	} */
-
-	const renderCharachters = (offset) => {
-		onCharachtersLoading();
-		marvelService
-			.getAllCharachters(offset)
+	const renderCharachters = (offset, initial) => {
+		initial ? setNewItemLoading(false) : setNewItemLoading(true);		
+		getAllCharachters(offset)
 			.then(onCharachtersLoaded)
-			.catch(onError)
 	}
 
-	const onCharachtersLoading = () => {
-		setNewItemLoading(true);
-	}
 
 	const onCharachtersLoaded = (newCharachters) => {
 		let ended = false;
@@ -60,22 +38,12 @@ const CharList = (props) => {
 		}
 
 		setCharachters(charachters => [...charachters, ...newCharachters]);
-		setLoading(false);
 		setNewItemLoading(false);
 		setCountItems(countItems => countItems + 9);
 		setCharEnded(ended);
 
 	}
 
-	const addMoreCharachters = () => {
-		setLoading(true);
-		renderCharachters();
-	}
-
-	const onError = () => {
-		setError(true);
-		setLoading(false);
-	}
 
 	// Объявление ref'а
 	let focusRef = useRef(null);
@@ -130,15 +98,14 @@ const CharList = (props) => {
 		)
 	}
 	
-
+	const items = renderItems(charachters);
 	const errorMessage = error ? <ErrorMessage/> : null;
-	const spinner = loading ? <Spinner/> : null;
-	const content = !(loading || error) ? renderItems(charachters) : null;
+	const spinner = loading && !newItemLoading ? <Spinner/> : null;
 	return (
 		<div className="char__list">
 			{errorMessage}
 			{spinner}
-			{content}
+			{items}
 			<button className="button button__main button__long" 
 				id='loadMoreBtn'
 				disabled={newItemLoading}

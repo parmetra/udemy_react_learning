@@ -1,17 +1,15 @@
 import { useState, useEffect } from 'react';
 import Spinner from '../spinner/Spinner';
 import ErrorMessage from '../errorMessage/ErrorMessage';
-import MarverService from '../../services/MarvelService';
+import useMarverService from '../../services/MarvelService';
 
 import './randomChar.scss';
 import mjolnir from '../../resources/img/mjolnir.png';
 
 const RandomChar = () => {
 	const [charachter, setCharachters] = useState({});
-	const [loading, setLoading] = useState(true);
-	const [error, setError] = useState(false);
 
-	const marvelService = new MarverService();
+	const {loading, error, getCharachter, clearError} = useMarverService();
 
 	useEffect(() => {
 		updateChar();
@@ -19,24 +17,13 @@ const RandomChar = () => {
 
 	const onCharLoaded = (charachter) => {
 		setCharachters(charachter);
-		setLoading(false);
-		setError(false);
-	}
-
-	const onError = () => {
-		setLoading(false);
-		setError(true);
 	}
 
 	const updateChar = () => {
-		setLoading(true);
-		setError(false);
-		
+		clearError();
 		const id = Math.floor(Math.random() * (1011050 - 1010900) + 1010900);
-		marvelService
-			.getCharachter(id)
-			.then(onCharLoaded)
-			.catch(onError);
+		getCharachter(id)
+		.then(onCharLoaded);
 	}
 
 	const errorMessage = error ? <ErrorMessage/> : null;
@@ -69,7 +56,7 @@ const RandomChar = () => {
 const View = ({charachter}) => {
 
 	const {name, description, thumbnail, homepage, wiki } = charachter;
-	const clazz = "randomchar__img" + (thumbnail.includes("image_not_available") ? " image_not_available" : "");
+	const clazz = thumbnail ? ("randomchar__img" + ((thumbnail.includes("image_not_available") || thumbnail.includes("4c002e0305708")) ? " image_not_available" : "")) : null;
 
 	return (
 		<div className="randomchar__block">

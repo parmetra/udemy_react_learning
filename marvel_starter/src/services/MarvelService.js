@@ -1,31 +1,30 @@
+import { useHttp } from "../hooks/http.hook";
 
+const useMarverService = () => {
+	const {loading, request, error, clearError} = useHttp();
+	const _apiBase = "https://gateway.marvel.com:443/v1/public/";
+	const _apiKey = "apikey=f4bcc2ac3bb99f27cd2d3f164a8f91dd";
+	const _baseOffset = 450;
+	const _baseOffsetComics = 10;
 
-class MarverService {
-	_apiBase = "https://gateway.marvel.com:443/v1/public/";
-	_apiKey = "apikey=f4bcc2ac3bb99f27cd2d3f164a8f91dd";
-	_baseOffset = 450;
+	
 
-	getResource = async (url) => {
-		let res = await fetch(url);
-
-		if (!res.ok) {
-			throw new Error(`Could not fetch ${url}, status: ${res.status}`);
-		}
-
-		return await res.json();
+	const getAllCharachters = async (offset = _baseOffset) => {
+		const res = await request(`${_apiBase}characters?limit=${9}&offset=${offset}&${_apiKey}`);
+		return res.data.results.map(_transformCharacher);
 	}
 
-	getAllCharachters = async (offset = this._baseOffset) => {
-		const res = await this.getResource(`${this._apiBase}characters?limit=${9}&offset=${offset}&${this._apiKey}`);
-		return res.data.results.map(this._transformCharacher);
+	const getCharachter = async (id) => {
+		const res = await request(`${_apiBase}characters/${id}?${_apiKey}`);
+		return _transformCharacher(res.data.results[0]);
 	}
 
-	getCharachter = async (id) => {
-		const res = await this.getResource(`${this._apiBase}characters/${id}?${this._apiKey}`);
-		return this._transformCharacher(res.data.results[0]);
+	const getAllComics = async (offset = _baseOffsetComics) => {
+		const res = await request(`${_apiBase}comics?issueNumber=${2}&limit=${8}&offset=${offset}&${_apiKey}`);
+		return res.data.results.map(_transformComics);
 	}
 	
-	_transformCharacher = (charachter) => {
+	const _transformCharacher = (charachter) => {
 		return {
 			id: charachter.id,
 			name: charachter.name,
@@ -36,6 +35,20 @@ class MarverService {
 			comics: charachter.comics.items
 		}
 	}
+
+	const _transformComics = (comics) => {
+		return {
+			id: comics.id,
+			digitalId: comics.digitalId,
+			title: comics.title,
+			description: comics.description ? comics.description : `Описание отсутствует`,
+			pageCount: comics.pageCount,
+			prices: comics.prices[0].price,
+			thumbnail: `${comics.thumbnail.path}.${comics.thumbnail.extension}`
+		}
+	}
+
+	return {loading, error, getAllCharachters, getCharachter, clearError, getAllComics};
 }
 
-export default MarverService;
+export default useMarverService;

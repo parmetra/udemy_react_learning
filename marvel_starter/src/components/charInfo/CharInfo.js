@@ -3,15 +3,13 @@ import PropTypes from 'prop-types';
 import Spinner from '../spinner/Spinner';
 import ErrorMessage from '../errorMessage/ErrorMessage';
 import Skeleton from '../skeleton/Skeleton';
-import MarverService from '../../services/MarvelService';
+import useMarverService from '../../services/MarvelService';
 import './charInfo.scss';
 
 const CharInfo = (props) => {
 	const [char, setChar] = useState(null);
-	const [loading, setLoading] = useState(false);
-	const [error, setError] = useState(false);
 
-	const marvelService = new MarverService();
+	const {loading, error, getCharachter, clearError} = useMarverService();
 
 	// Вызов useEffect при первоначальном рендеринге не нужен, т.к. useEffect ниже выполняет ту же работу при рендере в первый раз, а затем каждый раз, когда props.charID изменяется
 	/* useEffect(() => {
@@ -29,23 +27,13 @@ const CharInfo = (props) => {
 			return;
 		}
 
-		setLoading(true);
-
-		marvelService
-			.getCharachter(charID)
-			.then(onCharLoaded)
-			.catch(onError);
+		clearError();
+		getCharachter(charID)
+			.then(onCharLoaded);
 	}
 
 	const onCharLoaded = (char) => {
 		setChar(char);
-		setLoading(false);
-		setError(false);
-	}
-
-	const onError = () => {
-		setLoading(false);
-		setError(true);
 	}
 
 		const skeleton = char || loading || error ? null: <Skeleton/>
