@@ -20,8 +20,13 @@ const useMarverService = () => {
 	}
 
 	const getAllComics = async (offset = _baseOffsetComics) => {
-		const res = await request(`${_apiBase}comics?issueNumber=${2}&limit=${8}&offset=${offset}&${_apiKey}`);
+		const res = await request(`${_apiBase}comics?issueNumber=${5}&limit=${8}&offset=${offset}&${_apiKey}`);
 		return res.data.results.map(_transformComics);
+	}
+
+	const getComic = async (id) => {
+		const res = await request(`${_apiBase}comics/${id}?${_apiKey}`);
+		return _transformComics(res.data.results[0]);
 	}
 	
 	const _transformCharacher = (charachter) => {
@@ -43,12 +48,13 @@ const useMarverService = () => {
 			title: comics.title,
 			description: comics.description ? comics.description : `Описание отсутствует`,
 			pageCount: comics.pageCount,
-			prices: comics.prices[0].price,
-			thumbnail: `${comics.thumbnail.path}.${comics.thumbnail.extension}`
+			prices: comics.prices[0].price ? `${comics.prices[0].price} $` : `unavailable`,
+			thumbnail: `${comics.thumbnail.path}.${comics.thumbnail.extension}`,
+			language: comics.textObjects[0]?.language ? comics.textObjects[0].language : `—`
 		}
 	}
 
-	return {loading, error, getAllCharachters, getCharachter, clearError, getAllComics};
+	return {loading, error, getAllCharachters, getCharachter, clearError, getAllComics, getComic};
 }
 
 export default useMarverService;

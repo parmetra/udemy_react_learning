@@ -1,11 +1,11 @@
 import { useState, useEffect, useRef } from 'react';
+import { Link } from 'react-router-dom';
+
 import useMarverService from '../../services/MarvelService';
 import ErrorMessage from '../errorMessage/ErrorMessage';
 import Spinner from '../spinner/Spinner';
 
 import './comicsList.scss';
-import uw from '../../resources/img/UW.png';
-import xMen from '../../resources/img/x-men.png';
 
 const ComicsList = (props) => {
     const [offset, setOffset] = useState(10);
@@ -35,7 +35,7 @@ const ComicsList = (props) => {
 			ended = true;
 		}
 
-		setComics(charachters => [...comics, ...newComics]);
+		setComics(comics => [...comics, ...newComics]);
 		setNewItemLoading(false);
 		setOffset(countItems => countItems + 8);
 		setComicsEnded(ended);
@@ -51,23 +51,12 @@ const ComicsList = (props) => {
 					tabIndex={0}
 					className="comics__item" 
 					key={id}
-					onClick={
-							(e) => {
-									props.onComicsSelected(item.id);
-									}
-							}
-					onKeyDown={
-						(e) => {
-							if (e.code === "Enter" || e.code === "Space") {
-								e.preventDefault();
-								props.onComicsSelected(item.id);
-							}
-						}
-					}
 				>
-					<img src={thumbnail} alt={title} className="comics__item-img" style={{objectFit: objectFitProperty}}/>
-					<div className="comics__item-name">{title}</div>
-                    <div className="comics__item-price">{prices}$</div>
+					<Link to={`/comics/${id}`}>
+						<img src={thumbnail} alt={title} className="comics__item-img" style={{objectFit: objectFitProperty}}/>
+						<div className="comics__item-name">{title}</div>
+						<div className="comics__item-price">{prices}</div>
+					</Link>
 				</li>
 			)
 		});
@@ -81,12 +70,11 @@ const ComicsList = (props) => {
     const items = renderItems(comics);
 	const errorMessage = error ? <ErrorMessage/> : null;
 	const spinner = loading && !newItemLoading ? <Spinner/> : null;
-    const content = props.selectedComics ? null : items;
     return (
         <div className="comics__list">
 			{errorMessage}
 			{spinner}
-			{content}
+			{items}
 			<button className="button button__main button__long" 
 				id='loadMoreBtn'
 				disabled={newItemLoading}

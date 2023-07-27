@@ -1,4 +1,5 @@
 import { Component, useState, useEffect, useCallback } from 'react';
+import { Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import Spinner from '../spinner/Spinner';
 import ErrorMessage from '../errorMessage/ErrorMessage';
@@ -81,9 +82,15 @@ const View = ({charachter}) => {
 					{
 						comics.map((item, i) => {
 							if (i > 9) return;
+							// Мой вариант
+							// const comicId = item.resourceURI.substring(43);
+							// Вариант Артура. Спасибо ему!
+							const comicId = item.resourceURI.split('/').pop();
 							return (
 								<li className="char__comics-item" key={i}>
-									{item.name}
+									<Link to={`/comics/${comicId}`}>
+										{item.name}
+									</Link>
 								</li>
 							)
 						})
