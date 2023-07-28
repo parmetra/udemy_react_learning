@@ -1,5 +1,6 @@
 import { Component, useState, useEffect, useRef } from 'react';
 import PropTypes from 'prop-types';
+import {CSSTransition, TransitionGroup} from 'react-transition-group'; 
 
 import useMarverService from '../../services/MarvelService';
 import Spinner from '../spinner/Spinner';
@@ -66,34 +67,42 @@ const CharList = (props) => {
 			const {name, thumbnail, id} = item;
 			const objectFitProperty = thumbnail.includes("image_not_available") ? "contain" : null;
 			return (
-				<li
-					tabIndex={0}
-					className="char__item" 
+				<CSSTransition
+					timeout={10000}
 					key={id}
-					onClick={
+					classNames="char__item"
+				>
+					<li
+						tabIndex={0}
+						className="char__item" 
+						key={id}
+						onClick={
+								(e) => {
+										props.onCharSelected(item.id);
+										focusOnRef(e);
+										}
+								}
+						onKeyDown={
 							(e) => {
+								if (e.code === "Enter" || e.code === "Space") {
+									e.preventDefault();
 									props.onCharSelected(item.id);
 									focusOnRef(e);
-									}
-							}
-					onKeyDown={
-						(e) => {
-							if (e.code === "Enter" || e.code === "Space") {
-								e.preventDefault();
-								props.onCharSelected(item.id);
-								focusOnRef(e);
+								}
 							}
 						}
-					}
-				>
-					<img src={thumbnail} alt={name} style={{objectFit: objectFitProperty}}/>
-					<div className="char__name">{name}</div>
-				</li>
+					>
+						<img src={thumbnail} alt={name} style={{objectFit: objectFitProperty}}/>
+						<div className="char__name">{name}</div>
+					</li>
+				</CSSTransition>
 			)
 		});
 		return (
 			<ul className="char__grid">
-				{items}
+				<TransitionGroup component={null}>
+					{items}
+				</TransitionGroup>
 			</ul>
 		)
 	}
