@@ -1,4 +1,4 @@
-import React, {Component, useRef, useState, useEffect, memo, PureComponent} from 'react';
+import React, {Component, useRef, useState, useEffect, memo, PureComponent, createContext, useContext} from 'react';
 import ReactDOM from 'react-dom';
 import styled from 'styled-components';
 import {Container} from 'react-bootstrap';
@@ -201,12 +201,18 @@ function useInputWithValidate(initVal) {
 	)
 }, propsCompare) */
 
+const dataContext = createContext({
+	mail: 'ali@mail.ru',
+	text: 'Some Text...'
+});
+
+const {Provider, Consumer} = dataContext;
 class Form extends Component {
-	shouldComponentUpdate(nextProps) {
+	/* shouldComponentUpdate(nextProps) {
 		if (this.props.mail.name === nextProps.mail.name) {
 			return false;
 		} return true;
-	};
+	}; */
 	render() {
 		console.log("render");
 		return (
@@ -218,12 +224,7 @@ class Form extends Component {
 					<div className="mb-3">
 						<input type='text' className='form-control' readOnly/>
 						<label htmlFor="exampleFormControlInput1" className="form-label mt-3">Email address</label>
-						<input 
-							type="email"
-							value={this.props.mail.name}
-							className={`form-control`}
-							id="exampleFormControlInput1" 
-							placeholder="name@example.com"/>
+						<InputComponent/>
 					</div>
 					<div className="mb-3">
 						<label htmlFor="exampleFormControlTextarea1" className="form-label">Example textarea</label>
@@ -239,6 +240,7 @@ class Form extends Component {
 		)
 	}
 }
+
 
 const Portal = (props) => {
 	const node = document.createElement("div");
@@ -257,30 +259,34 @@ const Msg = () => {
 
 function App() {
 	const [data, setData] = useState({
-		mail: {
-			name: 'ali@mail.ru'
-		},
-		text: 'Some Text...'
+		mail: 'first@mail.ru',
+		text: 'Some Text...',
+		foreceChangeMail: foreceChangeMail
 	})
+
+	function foreceChangeMail () {
+		setData({...data, mail: 'newMail@sobaka.com'})
+	}
   return (
     <Wrapper>
 
-		<Form mail={data.mail} text={data.text}/>
-		<button 
-			className={"btn btn-secondary"}
-			onClick={() => setData({
-				mail: {
-					name: 'a1li@mail.ru'
-				},
-				text: 'Some Text...'
-			})}
-			value='Click me'
-		>
-			Click
-		</button>
-		<br/>
-		<br/>
-		<br/>
+		<Provider value={data}>
+			<Form text={data.text}/>
+			<button 
+				className={"btn btn-secondary"}
+				onClick={() => setData({
+					mail: 'second@mail.ru',
+					text: 'One more Some Text...',
+					foreceChangeMail: foreceChangeMail
+				})}
+				value='Click me'
+			>
+				Click
+			</button>
+			<br/>
+			<br/>
+			<br/>
+		</Provider>
 
 		<Counter render={counter => (
 			<Message counter={counter}/>
@@ -311,6 +317,47 @@ function App() {
     </Wrapper>
   );
 }
+
+/* class InputComponent extends Component {
+	static contextType = dataContext;
+	render() {
+		return (
+			// <Consumer>
+			// 	{
+			// 		value => {
+			// 			return (
+			// 				<input value={value.mail} 
+			// 				type='email' 
+			// 				className='form-control' 
+			// 				placeholder='yourMail@gmail.com'/>
+			// 			)
+			// 		}
+			// 	}
+			// </Consumer>
+
+			<input 
+				value={this.context.mail} 
+				type='email' 
+				className='form-control' 
+				placeholder='yourMail@gmail.com'/>
+		)
+	}
+} */
+
+const InputComponent = () => {
+
+	const context = useContext(dataContext);
+
+	return (
+		<input 
+			value={context.mail} 
+			type='email' 
+			className='form-control' 
+			placeholder='yourMail@gmail.com'
+			onFocus={context.foreceChangeMail}/>
+	)
+}
+
 
 
 export default App;
