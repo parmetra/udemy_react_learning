@@ -1,4 +1,4 @@
-import React, {Component, useRef, useState, useEffect} from 'react';
+import React, {Component, useRef, useState, useEffect, memo, PureComponent} from 'react';
 import ReactDOM from 'react-dom';
 import styled from 'styled-components';
 import {Container} from 'react-bootstrap';
@@ -155,11 +155,19 @@ function useInputWithValidate(initVal) {
 	return {value: value, onChange: onChange, validateInput: validateInput};
 }
 
-const Form = () => {
+
+/* function propsCompare(prevProps, nextProps) {
+	return prevProps.mail.name === nextProps.mail.name && prevProps.text === nextProps.text;
+} */
+
+/* const Form = memo((props) => {
 	const input = useInputWithValidate("");
 	const textArea = useInputWithValidate("");
 
 	const color = input.validateInput() ? 'text-danger' : 'null';
+
+	console.log("render");
+
 	return (
 		<Container>
 			<form 
@@ -172,8 +180,8 @@ const Form = () => {
 					<label htmlFor="exampleFormControlInput1" className="form-label mt-3">Email address</label>
 					<input 
 						onChange={input.onChange}
-						type="email" 
-						value={input.value}
+						type="email"
+						value={props.mail.name}
 						className={`form-control ${color}`}
 						id="exampleFormControlInput1" 
 						placeholder="name@example.com"/>
@@ -185,12 +193,51 @@ const Form = () => {
 						id="exampleFormControlTextarea1" 
 						rows="3"
 						onChange={textArea.onChange}
-						value={textArea.value}
+						value={props.text}
 					></textarea>
 				</div>
 			</form>
 		</Container>
 	)
+}, propsCompare) */
+
+class Form extends Component {
+	shouldComponentUpdate(nextProps) {
+		if (this.props.mail.name === nextProps.mail.name) {
+			return false;
+		} return true;
+	};
+	render() {
+		console.log("render");
+		return (
+			<Container>
+				<form 
+					className="w-50 border mt-5 p-3 m-auto" 
+					style={{position: "relative", overflow: "hidden"}}
+				>
+					<div className="mb-3">
+						<input type='text' className='form-control' readOnly/>
+						<label htmlFor="exampleFormControlInput1" className="form-label mt-3">Email address</label>
+						<input 
+							type="email"
+							value={this.props.mail.name}
+							className={`form-control`}
+							id="exampleFormControlInput1" 
+							placeholder="name@example.com"/>
+					</div>
+					<div className="mb-3">
+						<label htmlFor="exampleFormControlTextarea1" className="form-label">Example textarea</label>
+						<textarea 
+							className="form-control" 
+							id="exampleFormControlTextarea1" 
+							rows="3"
+							value={this.props.text}
+						></textarea>
+					</div>
+				</form>
+			</Container>
+		)
+	}
 }
 
 const Portal = (props) => {
@@ -209,10 +256,31 @@ const Msg = () => {
 }
 
 function App() {
+	const [data, setData] = useState({
+		mail: {
+			name: 'ali@mail.ru'
+		},
+		text: 'Some Text...'
+	})
   return (
     <Wrapper>
 
-		<Form/>
+		<Form mail={data.mail} text={data.text}/>
+		<button 
+			className={"btn btn-secondary"}
+			onClick={() => setData({
+				mail: {
+					name: 'a1li@mail.ru'
+				},
+				text: 'Some Text...'
+			})}
+			value='Click me'
+		>
+			Click
+		</button>
+		<br/>
+		<br/>
+		<br/>
 
 		<Counter render={counter => (
 			<Message counter={counter}/>
