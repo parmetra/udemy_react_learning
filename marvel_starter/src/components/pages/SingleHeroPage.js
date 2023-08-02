@@ -1,6 +1,8 @@
 import { useState, useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
 
+import { Helmet } from 'react-helmet';
+
 import useMarverService from '../../services/MarvelService';
 import Spinner from '../spinner/Spinner';
 import ErrorMessage from '../errorMessage/ErrorMessage';
@@ -47,6 +49,13 @@ const View = ({hero}) => {
 
 	return (
 		<>
+			<Helmet>
+				<meta 
+					name="description" 
+					content={`About "${name}"`}
+				/>
+				<title>Hero "{name}" - Marvel Information Portal</title>
+			</Helmet>
 			<AppBanner/>
 			<div className="single-hero">
 				<img src={thumbnail} alt={name} className="single-hero__img"/>

@@ -12,12 +12,12 @@ const ComicsPage = () => {
 	}
 
 	return (
-		<div>
+		<>
 			<AppBanner/>
 			<ErrorBoundary>
 				<ComicsList onComicsSelected={onComicsSelected} selectedComics={selectedComics} setSelectedComics={setSelectedComics}/>
 			</ErrorBoundary>
-		</div>
+		</>
 	)
 }
 
