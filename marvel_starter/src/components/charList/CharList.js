@@ -45,20 +45,21 @@ const CharList = (props) => {
 
 	}
 
-
 	// Объявление ref'а
 	let focusRef = useRef(null);
 	// Создание ref'а через callback
 	const setRef = (element) => {
-		focusRef = element;
+		focusRef.current = element;
 	}
 
 	const focusOnRef = (e) => {
 		if (focusRef.current) {
-			focusRef.classList.remove("char__item_selected");
+			focusRef.current.classList.remove("char__item_selected");
 		}
+
 		setRef(e.currentTarget);
-		focusRef.classList.add("char__item_selected");
+
+		focusRef.current.classList.add("char__item_selected");
 	}
 
 	
