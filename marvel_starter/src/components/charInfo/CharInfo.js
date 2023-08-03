@@ -1,16 +1,14 @@
 import { Component, useState, useEffect, useCallback } from 'react';
 import { Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
-import Spinner from '../spinner/Spinner';
-import ErrorMessage from '../errorMessage/ErrorMessage';
-import Skeleton from '../skeleton/Skeleton';
+import setContent from '../../utils/setContent';
 import useMarverService from '../../services/MarvelService';
 import './charInfo.scss';
 
 const CharInfo = (props) => {
 	const [char, setChar] = useState(null);
 
-	const {loading, error, getCharachter, clearError} = useMarverService();
+	const {getCharachter, clearError, process, setProcess} = useMarverService();
 
 	// Вызов useEffect при первоначальном рендеринге не нужен, т.к. useEffect ниже выполняет ту же работу при рендере в первый раз, а затем каждый раз, когда props.charID изменяется
 	/* useEffect(() => {
@@ -30,30 +28,29 @@ const CharInfo = (props) => {
 
 		clearError();
 		getCharachter(charID)
-			.then(onCharLoaded);
+			.then(onCharLoaded)
+			.then(() => setProcess("confirmed"));
 	}
 
 	const onCharLoaded = (char) => {
 		setChar(char);
 	}
 
-		const skeleton = char || loading || error ? null: <Skeleton/>
-		const errorMessage = error ? <ErrorMessage/> : null;
-		const spinner = loading ? <Spinner/> : null;
-		const content = !(loading || error || !char) ? <View charachter={char}/> : null;
-		return (
-			<div className="char__info">
-				{skeleton}
-				{errorMessage}
-				{spinner}
-				{content}
-			</div>
-		)
+
+	// const skeleton = char || loading || error ? null: <Skeleton/>
+	// const errorMessage = error ? <ErrorMessage/> : null;
+	// const spinner = loading ? <Spinner/> : null;
+	// const content = !(loading || error || !char) ? <View charachter={char}/> : null;
+	return (
+		<div className="char__info">
+			{setContent(process, View, char)}
+		</div>
+	)
 	
 }
 
-const View = ({charachter}) => {
-	const {thumbnail, name, homepage, wiki, description, comics} = charachter;
+const View = ({data}) => {
+	const {thumbnail, name, homepage, wiki, description, comics} = data;
 	const objectFitProperty = thumbnail.includes("image_not_available") ? "contain" : null;
 	return (
 		<>

@@ -1,7 +1,7 @@
 import { useHttp } from "../hooks/http.hook";
 
 const useMarverService = () => {
-	const {loading, request, error, clearError} = useHttp();
+	const { request, clearError, process, setProcess} = useHttp();
 	const _apiBase = "https://gateway.marvel.com:443/v1/public/";
 	const _apiKey = "apikey=f4bcc2ac3bb99f27cd2d3f164a8f91dd";
 	const _baseOffset = 450;
@@ -60,7 +60,7 @@ const useMarverService = () => {
 		}
 	}
 
-	return {loading, error, getAllCharachters, getCharachter, clearError, getAllComics, getComic, getCharachterByName};
+	return {getAllCharachters, getCharachter, clearError, getAllComics, getComic, getCharachterByName, process, setProcess};
 }
 
 export default useMarverService;

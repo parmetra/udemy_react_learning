@@ -4,8 +4,9 @@ import { useParams, Link } from 'react-router-dom';
 import { Helmet } from 'react-helmet';
 
 import useMarverService from '../../services/MarvelService';
-import Spinner from '../spinner/Spinner';
-import ErrorMessage from '../errorMessage/ErrorMessage';
+
+import setContent from '../../utils/setContent';
+
 import AppBanner from '../appBanner/AppBanner';
 
 import './SingleHeroPage.scss';
@@ -13,7 +14,7 @@ import './SingleHeroPage.scss';
 
 const SingleHeroPage = () => {
 	const [hero, setHero] = useState(null);
-	const {loading, error, clearError, getCharachter} = useMarverService();
+	const {clearError, getCharachter, process, setProcess} = useMarverService();
 
 	const {heroId} = useParams();
 
@@ -25,6 +26,7 @@ const SingleHeroPage = () => {
 		clearError();
 		getCharachter(heroId)
 			.then(onHeroLoaded)
+			.then(() => setProcess("confirmed"));
 	};
 
 	const onHeroLoaded = (item) => {
@@ -32,20 +34,18 @@ const SingleHeroPage = () => {
 	};
 	
 	
-	const errorMessage = error ? <ErrorMessage/> : null;
-	const spinner = loading ? <Spinner/> : null;
-	const content = !(loading || error || !hero) ? <View hero={hero}/> : null;
+	// const errorMessage = error ? <ErrorMessage/> : null;
+	// const spinner = loading ? <Spinner/> : null;
+	// const content = !(loading || error || !hero) ? <View hero={hero}/> : null;
     return (
 		<>
-			{errorMessage}
-			{spinner}
-			{content}
+			{setContent(process, View, hero)}
 		</>
     )
 }
 
-const View = ({hero}) => {
-	const {thumbnail, name, description} = hero;
+const View = ({data}) => {
+	const {thumbnail, name, description} = data;
 
 	return (
 		<>

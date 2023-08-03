@@ -1,6 +1,6 @@
 import { Component, useState, useEffect, useRef } from 'react';
 import PropTypes from 'prop-types';
-import {CSSTransition, TransitionGroup} from 'react-transition-group'; 
+// import {CSSTransition, TransitionGroup} from 'react-transition-group'; 
 
 import useMarverService from '../../services/MarvelService';
 import Spinner from '../spinner/Spinner';
@@ -8,6 +8,25 @@ import ErrorMessage from '../errorMessage/ErrorMessage';
 
 
 import './charList.scss';
+
+const setContent = (process, Component, newItemLoading) => {
+	switch(process) {
+		case "waiting":
+			return <Spinner/>;
+			break;
+		case "loading":
+			return newItemLoading ? <Component /> : <Spinner/>;
+			break;
+		case "error":
+			return <ErrorMessage/>;
+			break;
+		case "confirmed":
+			return <Component />;
+			break;
+		default:
+			throw new Error("Unexpected process state");
+	}
+}
 
 const CharList = (props) => {
 	const [charachters, setCharachters] = useState([]);
@@ -18,7 +37,7 @@ const CharList = (props) => {
 	const [countItems, setCountItems] = useState(450);
 	const [charEnded, setCharEnded] = useState(false);
 
-	const {loading, error, getAllCharachters} = useMarverService();
+	const {getAllCharachters, process, setProcess} = useMarverService();
 
 	useEffect(() => {
 		renderCharachters(countItems, true);
@@ -29,6 +48,7 @@ const CharList = (props) => {
 		initial ? setNewItemLoading(false) : setNewItemLoading(true);		
 		getAllCharachters(offset)
 			.then(onCharachtersLoaded)
+			.then(() => setProcess("confirmed"))
 	}
 
 
@@ -68,11 +88,11 @@ const CharList = (props) => {
 			const {name, thumbnail, id} = item;
 			const objectFitProperty = thumbnail.includes("image_not_available") ? "contain" : null;
 			return (
-				<CSSTransition
-					timeout={10000}
-					key={id}
-					classNames="char__item"
-				>
+				// <CSSTransition
+				// 	timeout={10000}
+				// 	key={id}
+				// 	classNames="char__item"
+				// >
 					<li
 						tabIndex={0}
 						className="char__item" 
@@ -96,26 +116,21 @@ const CharList = (props) => {
 						<img src={thumbnail} alt={name} style={{objectFit: objectFitProperty}}/>
 						<div className="char__name">{name}</div>
 					</li>
-				</CSSTransition>
+				// </CSSTransition>
 			)
 		});
 		return (
 			<ul className="char__grid">
-				<TransitionGroup component={null}>
+				{/* <TransitionGroup component={null}> */}
 					{items}
-				</TransitionGroup>
+				{/* </TransitionGroup> */}
 			</ul>
 		)
 	}
 	
-	const items = renderItems(charachters);
-	const errorMessage = error ? <ErrorMessage/> : null;
-	const spinner = loading && !newItemLoading ? <Spinner/> : null;
 	return (
 		<div className="char__list">
-			{errorMessage}
-			{spinner}
-			{items}
+			{setContent(process, () => renderItems(charachters), newItemLoading)}
 			<button className="button button__main button__long" 
 				id='loadMoreBtn'
 				disabled={newItemLoading}

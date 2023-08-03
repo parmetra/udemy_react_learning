@@ -4,6 +4,9 @@ import { useParams, Link } from 'react-router-dom';
 import { Helmet } from 'react-helmet';
 
 import useMarverService from '../../services/MarvelService';
+
+import setContent from '../../utils/setContent';
+
 import Spinner from '../spinner/Spinner';
 import ErrorMessage from '../errorMessage/ErrorMessage';
 
@@ -12,7 +15,7 @@ import './singleComicPage.scss';
 
 const SingleComicPage = () => {
 	const [comic, setComic] = useState(null);
-	const {loading, error, getComic, clearError} = useMarverService();
+	const {getComic, clearError, process, setProcess} = useMarverService();
 
 	const {comicId} = useParams();
 
@@ -24,27 +27,22 @@ const SingleComicPage = () => {
 		clearError();
 		getComic(comicId)
 			.then(onComicLoaded)
+			.then(() => setProcess("confirmed"))
 	};
 
 	const onComicLoaded = (comic) => {
 		setComic(comic);
 	};
 	
-	
-	const errorMessage = error ? <ErrorMessage/> : null;
-	const spinner = loading ? <Spinner/> : null;
-	const content = !(loading || error || !comic) ? <View comic={comic}/> : null;
     return (
 		<>
-			{errorMessage}
-			{spinner}
-			{content}
+			{setContent(process, View, comic)}
 		</>
     )
 }
 
-const View = ({comic}) => {
-	const {thumbnail, title, description, pageCount, prices, language} = comic;
+const View = ({data}) => {
+	const {thumbnail, title, description, pageCount, prices, language} = data;
 
 	return (
 		<div className="single-comic">
