@@ -1,6 +1,6 @@
-import { Component, useState, useEffect, useRef } from 'react';
+import { useMemo, useState, useEffect, useRef } from 'react';
 import PropTypes from 'prop-types';
-// import {CSSTransition, TransitionGroup} from 'react-transition-group'; 
+import {CSSTransition, TransitionGroup} from 'react-transition-group'; 
 
 import useMarverService from '../../services/MarvelService';
 import Spinner from '../spinner/Spinner';
@@ -9,19 +9,19 @@ import ErrorMessage from '../errorMessage/ErrorMessage';
 
 import './charList.scss';
 
-const setContent = (process, Component, newItemLoading) => {
+const setContent = (process, items, newItemLoading) => {
 	switch(process) {
 		case "waiting":
 			return <Spinner/>;
 			break;
 		case "loading":
-			return newItemLoading ? <Component /> : <Spinner/>;
+			return newItemLoading ? items : <Spinner/>;
 			break;
 		case "error":
 			return <ErrorMessage/>;
 			break;
 		case "confirmed":
-			return <Component />;
+			return items;
 			break;
 		default:
 			throw new Error("Unexpected process state");
@@ -88,11 +88,11 @@ const CharList = (props) => {
 			const {name, thumbnail, id} = item;
 			const objectFitProperty = thumbnail.includes("image_not_available") ? "contain" : null;
 			return (
-				// <CSSTransition
-				// 	timeout={10000}
-				// 	key={id}
-				// 	classNames="char__item"
-				// >
+				<CSSTransition
+					timeout={10000}
+					key={id}
+					classNames="char__item"
+				>
 					<li
 						tabIndex={0}
 						className="char__item" 
@@ -116,21 +116,25 @@ const CharList = (props) => {
 						<img src={thumbnail} alt={name} style={{objectFit: objectFitProperty}}/>
 						<div className="char__name">{name}</div>
 					</li>
-				// </CSSTransition>
+				</CSSTransition>
 			)
 		});
 		return (
 			<ul className="char__grid">
-				{/* <TransitionGroup component={null}> */}
+				<TransitionGroup component={null}>
 					{items}
-				{/* </TransitionGroup> */}
+				</TransitionGroup>
 			</ul>
 		)
 	}
+
+	const elements = useMemo(() => {
+		return setContent(process, renderItems(charachters), newItemLoading)
+	}, [process])
 	
 	return (
 		<div className="char__list">
-			{setContent(process, () => renderItems(charachters), newItemLoading)}
+			{elements}
 			<button className="button button__main button__long" 
 				id='loadMoreBtn'
 				disabled={newItemLoading}
