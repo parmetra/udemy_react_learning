@@ -1,0 +1,18 @@
+.App {
+	display: block;
+	margin: 0 auto;
+}
+
+h1 {
+	text-align: center;
+}
+
+.btns {
+	display: flex;
+	justify-content: center;
+	gap: 20px;
+}
+
+.btn {
+	width: 100px;
+}
