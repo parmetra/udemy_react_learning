@@ -1,8 +1,13 @@
 import { connect } from "react-redux";
-import * as actions from "../actions";
+import {inc, dec, x5, rnd} from "../actions";
 // import { bindActionCreators } from "redux";
+import { useSelector, useDispatch } from "react-redux";
 
-const Counter = ({counter, inc, dec, x5, rnd}) => {
+const Counter = () => {
+
+	const counter = useSelector(state => state.counter);
+	const dispatch = useDispatch();
+
 	return(
 		<div className="App">
 			<h1 id="counter">{counter}</h1>
@@ -10,28 +15,28 @@ const Counter = ({counter, inc, dec, x5, rnd}) => {
 				<button 
 					id="dec" 
 					className="btn btn-primary" 
-					onClick={dec}
+					onClick={() => dispatch(dec())}
 				>
 					Minus
 				</button>
 				<button 
 					id="inc" 
 					className="btn btn-primary" 
-					onClick={inc}
+					onClick={() => dispatch(inc())}
 				>
 					Plus
 				</button>
 				<button 
 					id="x5" 
 					className="btn btn-primary"
-					onClick={x5}
+					onClick={() => dispatch(x5())}
 				>
 					x5
 				</button>
 				<button 
 					id="rnd" 
 					className="btn btn-primary" 
-					onClick={rnd}
+					onClick={() => dispatch(rnd())}
 				>
 					RND
 				</button>
@@ -40,11 +45,11 @@ const Counter = ({counter, inc, dec, x5, rnd}) => {
 	)
 }
 
-const mapStateToProps = (state) => {
-	return {
-		counter: state.value
-	}
-}
+// const mapStateToProps = (state) => {
+// 	return {
+// 		counter: state.counter
+// 	}
+// }
 
 /* const mapDispatchToProps = (dispatch) => {
 	const {inc, dec, x5, rnd} = bindActionCreators(actions, dispatch);
@@ -56,4 +61,5 @@ const mapStateToProps = (state) => {
 	}
 } */
 
-export default connect(mapStateToProps, actions)(Counter);
+// export default connect(mapStateToProps, actions)(Counter);
+export default Counter;
