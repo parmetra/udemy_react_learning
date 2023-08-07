@@ -1,58 +1,39 @@
-import {legacy_createStore as createStore} from "redux";
+import {legacy_createStore as createStore, bindActionCreators} from "redux";
 import 'bootstrap/dist/css/bootstrap.min.css';
-
 import "./App.css";
 
-
+import reducer from "./reducer";
+import * as actions from  "./actions";
 
 
 function App() {
-	const initialState = {
-		value: 0,
-		
-	};
-
-	const reducer = (state = initialState, action) => {
-		switch(action.type) {
-			case "INC":
-				return {
-					...state, 
-					value: state.value + 1
-				}
-			case "DEC":
-				return {
-					...state, 
-					value: state.value - 1
-				}
-			case "X5":
-				return {
-					...state, 
-					value: state.value * 5
-				}
-			case "RND":
-				return {
-					...state, 
-					value: state.value * action.payload
-				}
-			default:
-				return state;
-		}
-	};
 
 	const store = createStore(reducer);
+
+	const {dispatch, subscribe, getState} = store;
+
+	// const bindActionCreator = (creator, dispatch) => (...args) => {
+	// 	dispatch(creator(...args));
+	// }
+
+	// const incDispatch = bindActionCreator(inc, dispatch);
+	// const decDispatch = bindActionCreator(dec, dispatch);
+	// const x5Dispatch = bindActionCreator(x5, dispatch);
+	// const rndDispatch = bindActionCreator(rnd, dispatch);
+
+
+
+	const {inc, dec, x5, rnd} = bindActionCreators(actions, dispatch);
+	// const decDispatch = bindActionCreators(dec, dispatch);
+	// const x5Dispatch = bindActionCreators(x5, dispatch);
+	// const rndDispatch = bindActionCreators(rnd, dispatch);
+
 	
 	const update = () => {
-		document.querySelector("#counter").textContent = store.getState().value;
+		document.querySelector("#counter").textContent = getState().value;
 	}
-
 	
-	const dec = () => ({type: "DEC"});
-	const inc = () => ({type: "INC"});
-	const x5 = () => ({type: "X5"});
-	const rnd = (value) => ({type: "RND", payload: value});
-
-	store.subscribe(update);
-
+	subscribe(update);
 
 	return (
 		<div className="App">
@@ -60,32 +41,32 @@ function App() {
 			<div className="btns">
 				<button 
 					id="dec" 
-					class="btn btn-primary" 
-					onClick={() => {store.dispatch(dec())}}
+					className="btn btn-primary" 
+					onClick={dec}
 				>
 					Minus
 				</button>
 				<button 
 					id="inc" 
-					class="btn btn-primary" 
-					onClick={() => {store.dispatch(inc())}}
+					className="btn btn-primary" 
+					onClick={inc}
 				>
 					Plus
 				</button>
 				<button 
 					id="x5" 
-					class="btn btn-primary" 
-					onClick={() => {store.dispatch(x5())}}
+					className="btn btn-primary"
+					onClick={x5}
 				>
 					x5
 				</button>
 				<button 
 					id="rnd" 
-					class="btn btn-primary" 
+					className="btn btn-primary" 
 					onClick={() => {
-										const value = Math.floor(Math.random() * 10)
-										store.dispatch(rnd(value))
-									}}
+						const value = Math.floor(Math.random() * 10);
+						rnd(value);
+					}}
 				>
 					RND
 				</button>
