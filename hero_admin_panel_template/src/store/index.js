@@ -1,5 +1,5 @@
 import { legacy_createStore as createStore, combineReducers, compose, applyMiddleware} from 'redux';
-// import reducer from '../reducers';
+import ReduxThunk from "redux-thunk";
 import heroes from '../reducers/heroes';
 import filters from '../reducers/filters';
 
@@ -32,7 +32,7 @@ const enhancer = (createStore) => (...args) => {
 const store = createStore(
 	combineReducers({heroes: heroes, filters: filters}), 
 	compose(
-		applyMiddleware(stringMiddleware),
+		applyMiddleware(ReduxThunk, stringMiddleware),
 		window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__()
 	)
 );

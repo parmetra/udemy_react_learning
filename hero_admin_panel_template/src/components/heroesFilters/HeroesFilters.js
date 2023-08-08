@@ -2,7 +2,7 @@ import { useEffect } from 'react';
 import classNames from "classnames";
 import { useSelector, useDispatch } from 'react-redux';
 import { useHttp } from '../../hooks/http.hook';
-import { filterFetched, filterFetching, filterFetchingError, filterChanging } from '../../actions';
+import { fetchFilters, filterChanging } from '../../actions';
 import Spinner from '../spinner/Spinner';
 
 // Задача для этого компонента:
@@ -20,11 +20,7 @@ const HeroesFilters = () => {
     const {filters, filtersLoadingStatus, activeFilter} = useSelector(state => state.filters);
 
     useEffect(() => {
-		dispatch(filterFetching());
-		request("http://localhost:3001/filters")
-			.then(data => dispatch(filterFetched(data)))
-			.catch(() => dispatch(filterFetchingError()))
-
+		dispatch(fetchFilters(request));
 
 		// eslint-disable-next-line
 	}, []);
