@@ -1,0 +1,61 @@
+{
+  "heroes": [
+    {
+      "id": 1,
+      "name": "Первый герой",
+      "description": "Первый герой в рейтинге!",
+      "element": "fire"
+    },
+    {
+      "id": 2,
+      "name": "Неизвестный герой",
+      "description": "Скрывающийся в тени",
+      "element": "wind"
+    },
+    {
+      "id": 3,
+      "name": "Морской герой",
+      "description": "Как аквамен, но не из DC",
+      "element": "water"
+    },
+    {
+      "id": "7a0f5ada-5626-4f91-b2d5-5fb4ff0bd8b0",
+      "name": "ZEMLA",
+      "description": "Копать",
+      "element": "earth"
+    },
+    {
+      "id": "40a3253f-f0c3-44dc-8117-feb47bc83c7c",
+      "name": "333",
+      "description": "333",
+      "element": "wind"
+    }
+  ],
+  "filters": [
+    {
+      "eng": "all",
+      "rus": "Все",
+      "class": "btn-outline-dark active"
+    },
+    {
+      "eng": "fire",
+      "rus": "Огонь",
+      "class": "btn-danger"
+    },
+    {
+      "eng": "water",
+      "rus": "Вода",
+      "class": "btn-primary"
+    },
+    {
+      "eng": "wind",
+      "rus": "Ветер",
+      "class": "btn-success"
+    },
+    {
+      "eng": "earth",
+      "rus": "Земля",
+      "class": "btn-secondary"
+    }
+  ]
+}
