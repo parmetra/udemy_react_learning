@@ -23,12 +23,6 @@
       "name": "ZEMLA",
       "description": "Копать",
       "element": "earth"
-    },
-    {
-      "id": "40a3253f-f0c3-44dc-8117-feb47bc83c7c",
-      "name": "333",
-      "description": "333",
-      "element": "wind"
     }
   ],
   "filters": [
