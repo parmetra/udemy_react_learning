@@ -1,13 +1,13 @@
 // import { createAction } from "@reduxjs/toolkit";
-import { heroesFetched, heroesFetching, heroesFetchingError } from "../components/heroesList/heroesSlice";
+// import { heroesFetched, heroesFetching, heroesFetchingError } from "../components/heroesList/heroesSlice";
 import { filterFetched, filterFetching, filterFetchingError } from "../components/heroesFilters/filterSlice";
 
-export const fetchHeroes = (request) => (dispatch) => {
-    dispatch(heroesFetching());
-        request("http://localhost:3001/heroes")
-            .then(data => dispatch(heroesFetched(data)))
-            .catch(() => dispatch(heroesFetchingError()))
-}
+// export const fetchHeroes = (request) => (dispatch) => {
+//     dispatch(heroesFetching());
+//         request("http://localhost:3001/heroes")
+//             .then(data => dispatch(heroesFetched(data)))
+//             .catch(() => dispatch(heroesFetchingError()))
+// }
 
 export const fetchFilters = (request) => (dispatch) => {
     dispatch(filterFetching());

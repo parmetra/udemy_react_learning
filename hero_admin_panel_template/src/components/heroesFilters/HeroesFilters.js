@@ -1,9 +1,7 @@
 import { useEffect } from 'react';
 import classNames from "classnames";
 import { useSelector, useDispatch } from 'react-redux';
-import { useHttp } from '../../hooks/http.hook';
-import { fetchFilters } from '../../actions';
-import { filterChanging } from './filterSlice';
+import { filterChanging, fetchFilters } from './filterSlice';
 import Spinner from '../spinner/Spinner';
 
 // Задача для этого компонента:
@@ -14,14 +12,12 @@ import Spinner from '../spinner/Spinner';
 // Представьте, что вы попросили бэкенд-разработчика об этом
 
 const HeroesFilters = () => {
-
-    const {request} = useHttp();
 	const dispatch = useDispatch();
 
     const {filters, filtersLoadingStatus, activeFilter} = useSelector(state => state.filters);
 
     useEffect(() => {
-		dispatch(fetchFilters(request));
+		dispatch(fetchFilters());
 
 		// eslint-disable-next-line
 	}, []);
