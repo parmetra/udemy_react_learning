@@ -1,10 +1,10 @@
 import { v4 as uuidv4 } from 'uuid';
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { useHttp } from '../../hooks/http.hook';
-import {heroCreate } from '../heroesList/heroesSlice';
 import { selectAll } from '../heroesFilters/filterSlice';
 import store from '../../store';
+import { useCreateHeroMutation } from '../../api/apiSlice';
 
 // Задача для этого компонента:
 // Реализовать создание нового героя с введенными данными. Он должен попадать
@@ -21,11 +21,10 @@ const HeroesAddForm = () => {
 	const [descr, setDescr] = useState('');
 	const [element, setElement] = useState('');
 
+	const [createHero, {isLoading}] = useCreateHeroMutation();
+
 	const filtersLoadingStatus = useSelector(state => state.filters.filtersLoadingStatus);
 	const filters = selectAll(store.getState());
-
-	const {request} = useHttp();
-	const dispatch = useDispatch();	
 
 	const renderList = (list, status) => {
 		if (status === "loading") {
@@ -53,10 +52,7 @@ const HeroesAddForm = () => {
             "element": element
 		}
 
-		request("http://localhost:3001/heroes", "POST", JSON.stringify(newHero))
-			.then(res => console.log(res, 'Отправка успешна'))
-			.then(dispatch(heroCreate(newHero)))
-			.catch(err => console.log(err));
+		createHero(newHero).unwrap();
 
 		// Очищаем форму после отправки
 		setName('');
