@@ -19,7 +19,7 @@ export const fetchFilters = createAsyncThunk(
 );
 
 const filterSlice = createSlice({
-	name: "filter",
+	name: "filters",
 	initialState,
 	reducers: {
 		filterChanging: (state, action) => {state.activeFilter = action.payload}
@@ -39,7 +39,7 @@ const filterSlice = createSlice({
 const {actions, reducer} = filterSlice;
 export default reducer;
 
-export const {selectAll} = filterAdapter.getSelectors(state => state.filter);
+export const {selectAll} = filterAdapter.getSelectors(state => state.filters);
 
 export const {
 	filterChanging
