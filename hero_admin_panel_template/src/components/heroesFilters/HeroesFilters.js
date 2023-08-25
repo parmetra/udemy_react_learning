@@ -1,8 +1,9 @@
 import { useEffect } from 'react';
 import classNames from "classnames";
 import { useSelector, useDispatch } from 'react-redux';
-import { filterChanging, fetchFilters } from './filterSlice';
+import { filterChanging, fetchFilters, selectAll } from './filterSlice';
 import Spinner from '../spinner/Spinner';
+import store from '../../store';
 
 // Задача для этого компонента:
 // Фильтры должны формироваться на основании загруженных данных
@@ -12,15 +13,23 @@ import Spinner from '../spinner/Spinner';
 // Представьте, что вы попросили бэкенд-разработчика об этом
 
 const HeroesFilters = () => {
-	const dispatch = useDispatch();
+	
 
-    const {filters, filtersLoadingStatus, activeFilter} = useSelector(state => state.filters);
+    const {filtersLoadingStatus, activeFilter} = useSelector(state => state.filters);
+    const filters = selectAll(store.getState());
+
+    const dispatch = useDispatch();
 
     useEffect(() => {
 		dispatch(fetchFilters());
 
 		// eslint-disable-next-line
 	}, []);
+
+    
+
+    if (filtersLoadingStatus === "loading") return <Spinner/>
+    else if (filtersLoadingStatus === "error") return <h5 style={{textAlign: 'center', marginTop: 20}}>Ошибка при загрузке...</h5>
 
     const renderBtns = (filters) => {
         if (filters && filters.length > 0) {
@@ -35,9 +44,6 @@ const HeroesFilters = () => {
             })
         }
     }
-
-    if (filtersLoadingStatus === "loading") return <Spinner/>
-    else if (filtersLoadingStatus === "error") return <h5 style={{textAlign: 'center', marginTop: 20}}>Ошибка при загрузке...</h5>
 
     const elements = renderBtns(filters);
 

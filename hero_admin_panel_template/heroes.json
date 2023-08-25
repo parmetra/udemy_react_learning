@@ -20,15 +20,9 @@
     },
     {
       "id": "7a0f5ada-5626-4f91-b2d5-5fb4ff0bd8b0",
-      "name": "ZEMLA",
-      "description": "Копать",
+      "name": "111",
+      "description": "222",
       "element": "earth"
-    },
-    {
-      "id": "110fd3b4-f417-41fc-9abe-dfb5fccab0c3",
-      "name": "222",
-      "description": "333",
-      "element": "wind"
     },
     {
       "id": "a660cbf5-4c0e-4820-81f3-ac065fcecd25",
@@ -37,9 +31,9 @@
       "element": "fire"
     },
     {
-      "id": "65882f47-9e4e-4fb6-a411-82325717cbb4",
-      "name": "3",
-      "description": "e",
+      "id": "395d273c-f0b1-476d-b089-21ea698747b9",
+      "name": "wwww",
+      "description": "wwwq",
       "element": "water"
     }
   ],
